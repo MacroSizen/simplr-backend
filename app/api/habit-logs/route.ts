@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "@/lib/middleware/auth";
 import { HabitsService } from "@/lib/services/habits.service";
 import { toggleHabitLogSchema, habitLogsQuerySchema } from "@/lib/validations/habits";
-import { ZodError } from "zod";
+import { ZodError } from "zod"
 
 // GET /api/habit-logs?habit_id=xxx&startDate=xxx&endDate=xxx
 export async function GET(req: NextRequest) {
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
-        { error: "Validation error", details: error.errors },
+        { error: "Validation error", details: (error as ZodError).errors },
         { status: 400 }
       );
     }
