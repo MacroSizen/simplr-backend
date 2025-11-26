@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "@/lib/middleware/auth";
 import { NotesService } from "@/lib/services/notes.service";
-import { createNoteSchema, notesSearchSchema } from "@/lib/validations/notes";
+import { createNoteSchema, notesSearchSchema, NotesQueryDTO } from "@/lib/validations/notes";
 import { ZodError } from "zod";
 
 // GET /api/notes?q=xxx&limit=50&offset=0
@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     const user = await verifyAuth(req);
 
     const { searchParams } = new URL(req.url);
-    const query = notesSearchSchema.parse({
+    const query: NotesQueryDTO = notesSearchSchema.parse({
       q: searchParams.get("q"),
       limit: searchParams.get("limit"),
       offset: searchParams.get("offset"),

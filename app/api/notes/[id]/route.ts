@@ -82,11 +82,11 @@ export async function PATCH(
 // DELETE /api/notes/[id]
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyAuth(req);
-    const validated = noteIdSchema.parse({ id: params.id });
+    const validated = noteIdSchema.parse({ id: (await params).id });
 
     const { error } = await NotesService.delete(user.id, validated.id);
 

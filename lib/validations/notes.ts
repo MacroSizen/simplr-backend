@@ -32,3 +32,4 @@ export const notesSearchSchema = z.object({
 
 export type NotesSearchInput = z.infer<typeof notesSearchSchema>;
 
+export type NotesQueryDTO = z.infer<typeof notesSearchSchema>;
