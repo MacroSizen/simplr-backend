@@ -50,7 +50,9 @@ export async function POST(req: NextRequest) {
     const user = await verifyAuth(req);
 
     const body = await req.json();
+    console.log(body);
     const validated = createExpenseSchema.parse(body);
+    console.log("lol", validated);
 
     const { data, error } = await ExpensesService.create(user.id, validated);
 

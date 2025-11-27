@@ -2,7 +2,7 @@ import { z } from "zod";
 
 // Create expense schema
 export const createExpenseSchema = z.object({
-  category: z.string().min(1, "Category is required").trim(),
+  categoryId: z.number(),
   amount: z
     .number()
     .positive("Amount must be positive")
@@ -29,4 +29,15 @@ export const expensesQuerySchema = z.object({
 });
 
 export type ExpensesQueryInput = z.infer<typeof expensesQuerySchema>;
+
+// Category schemas
+export const createCategorySchema = z.object({
+  name: z.number(),
+});
+
+export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
+
+export const updateCategorySchema = createCategorySchema;
+
+export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;
 

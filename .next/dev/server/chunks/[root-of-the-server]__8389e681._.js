@@ -216,7 +216,8 @@ class ExpensesService {
    * Get all expenses for a user
    */ static async getAll(userId, query) {
         const supabase = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2f$server$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["createClient"])();
-        let queryBuilder = supabase.from("expenses").select("*").eq("user_id", userId).order("date", {
+        console.log(userId);
+        let queryBuilder = supabase.from("expenses").select("*, categories(name)").eq("user_id", userId).order("date", {
             ascending: false
         });
         // Apply filters
@@ -243,8 +244,13 @@ class ExpensesService {
                 error
             };
         }
+        // Map the category name if available
+        const mappedData = data.map((expense)=>({
+                ...expense,
+                category: expense.categories?.name || expense.category
+            }));
         return {
-            data: data,
+            data: mappedData,
             error: null
         };
     }
@@ -267,14 +273,16 @@ class ExpensesService {
     /**
    * Create a new expense
    */ static async create(userId, input) {
+        console.log(input.categoryId);
         const supabase = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2f$server$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["createClient"])();
         const { data, error } = await supabase.from("expenses").insert({
             user_id: userId,
-            category: input.category,
+            category_id: input.categoryId,
             amount: input.amount,
             description: input.description || null
         }).select().single();
         if (error) {
+            console.log(error);
             return {
                 data: null,
                 error
@@ -305,17 +313,21 @@ class ExpensesService {
 "use strict";
 
 __turbopack_context__.s([
+    "createCategorySchema",
+    ()=>createCategorySchema,
     "createExpenseSchema",
     ()=>createExpenseSchema,
     "expenseIdSchema",
     ()=>expenseIdSchema,
     "expensesQuerySchema",
-    ()=>expensesQuerySchema
+    ()=>expensesQuerySchema,
+    "updateCategorySchema",
+    ()=>updateCategorySchema
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/external.js [app-route] (ecmascript) <export * as z>");
 ;
 const createExpenseSchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].object({
-    category: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().min(1, "Category is required").trim(),
+    categoryId: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].number(),
     amount: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].number().positive("Amount must be positive").finite("Amount must be a valid number"),
     description: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().trim().optional()
 });
@@ -329,6 +341,10 @@ const expensesQuerySchema = __TURBOPACK__imported__module__$5b$project$5d2f$node
     startDate: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().datetime().nullish(),
     endDate: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().datetime().nullish()
 });
+const createCategorySchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].object({
+    name: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].number()
+});
+const updateCategorySchema = createCategorySchema;
 }),
 "[project]/app/api/expenses/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
@@ -392,7 +408,9 @@ async function POST(req) {
     try {
         const user = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$middleware$2f$auth$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["verifyAuth"])(req);
         const body = await req.json();
+        console.log(body);
         const validated = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$validations$2f$expenses$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["createExpenseSchema"].parse(body);
+        console.log("lol", validated);
         const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$services$2f$expenses$2e$service$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["ExpensesService"].create(user.id, validated);
         if (error) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({

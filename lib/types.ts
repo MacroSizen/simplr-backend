@@ -7,10 +7,17 @@
 export interface Expense {
   id: string;
   user_id: string;
-  category: string;
+  category_id: number;
   amount: number;
   description: string | null;
   date: string;
+  created_at: string;
+}
+
+export interface Category {
+  id: number;
+  user_id: string;
+  name: string;
   created_at: string;
 }
 

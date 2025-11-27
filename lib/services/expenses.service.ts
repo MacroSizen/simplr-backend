@@ -2,7 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import type { Expense } from "@/lib/types";
 
 export interface CreateExpenseDTO {
-  category: string;
+  category?: string;
+  categoryId?: string;
   amount: number;
   description?: string;
 }
@@ -24,10 +25,10 @@ export class ExpensesService {
     query?: ExpensesQueryDTO
   ): Promise<{ data: Expense[] | null; error: Error | null }> {
     const supabase = await createClient();
-    
+    console.log(userId);
     let queryBuilder = supabase
       .from("expenses")
-      .select("*")
+      .select("*, categories(name)")
       .eq("user_id", userId)
       .order("date", { ascending: false });
 
@@ -62,7 +63,13 @@ export class ExpensesService {
       return { data: null, error };
     }
 
-    return { data: data as Expense[], error: null };
+    // Map the category name if available
+    const mappedData = (data as any[]).map((expense) => ({
+      ...expense,
+      category: expense.categories?.name || expense.category,
+    }));
+
+    return { data: mappedData as Expense[], error: null };
   }
 
   /**
@@ -94,12 +101,13 @@ export class ExpensesService {
     userId: string,
     input: CreateExpenseDTO
   ): Promise<{ data: Expense | null; error: Error | null }> {
+    console.log(input.categoryId);
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("expenses")
       .insert({
         user_id: userId,
-        category: input.category,
+        category_id: input.categoryId,
         amount: input.amount,
         description: input.description || null,
       })
@@ -107,6 +115,7 @@ export class ExpensesService {
       .single();
 
     if (error) {
+      console.log(error);
       return { data: null, error };
     }
 
