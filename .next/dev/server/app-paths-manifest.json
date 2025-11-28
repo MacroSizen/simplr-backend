@@ -1,10 +1,13 @@
 {
+  "/api/auth/login/route": "app/api/auth/login/route.js",
   "/api/auth/me/route": "app/api/auth/me/route.js",
   "/api/auth/refresh/route": "app/api/auth/refresh/route.js",
   "/api/categories/route": "app/api/categories/route.js",
   "/api/expenses/route": "app/api/expenses/route.js",
   "/api/habit-logs/route": "app/api/habit-logs/route.js",
+  "/api/habits/[id]/route": "app/api/habits/[id]/route.js",
   "/api/habits/route": "app/api/habits/route.js",
+  "/api/notes/[id]/route": "app/api/notes/[id]/route.js",
   "/api/notes/route": "app/api/notes/route.js",
   "/api/reminder-lists/route": "app/api/reminder-lists/route.js",
   "/api/reminders/[id]/route": "app/api/reminders/[id]/route.js",

@@ -426,7 +426,7 @@ const habitIdSchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modul
     id: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().uuid("Invalid habit ID")
 });
 const habitLogsQuerySchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].object({
-    habit_id: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().uuid("Invalid habit ID").optional(),
+    habit_id: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().uuid("Invalid habit ID"),
     startDate: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format").optional(),
     endDate: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format").optional()
 });
@@ -456,8 +456,8 @@ async function GET(req) {
         const { searchParams } = new URL(req.url);
         const query = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$validations$2f$habits$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["habitLogsQuerySchema"].parse({
             habit_id: searchParams.get("habit_id"),
-            startDate: searchParams.get("startDate"),
-            endDate: searchParams.get("endDate")
+            startDate: searchParams.get("startDate") || undefined,
+            endDate: searchParams.get("endDate") || undefined
         });
         const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$services$2f$habits$2e$service$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["HabitsService"].getLogs(user.id, query);
         if (error) {

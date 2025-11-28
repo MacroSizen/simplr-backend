@@ -1,60 +1,40 @@
-[00:00:01.024] Server  WARN     ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-[00:00:01.135] Server  LOG      ✓ Ready in 746ms
-[00:00:04.073] Server  LOG     {}
-[00:00:53.933] Server  LOG     {}
-[00:01:11.417] Server  WARN    Error: Route "/api/reminders/[id]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-[00:02:14.682] Server  LOG     {}
-[00:05:15.756] Server  LOG     {}
-[00:05:38.186] Server  ERROR   [
-  {
-    "validation": "uuid",
-    "code": "invalid_string",
-    "message": "Invalid uuid",
-    "path": [
-      "categoryId"
-    ]
-  }
-]
-[00:06:30.313] Server  LOG     {}
-[00:07:56.699] Server  LOG     {}
-[00:08:01.685] Server  LOG     {}
-[00:08:36.453] Server  LOG     {}
-[00:09:11.468] Server  LOG     {}
-[00:09:11.469] Server  LOG     {}
-[00:09:37.448] Server  LOG     {}
-[00:11:31.489] Server  LOG     {}
-[00:12:41.224] Server  LOG     {}
-[00:26:32.764] Server  LOG     {}
-[00:26:32.772] Server  LOG     lol {}
-[00:28:02.802] Server  LOG     {}
-[00:28:02.804] Server  LOG     lol {}
-[00:30:36.918] Server  LOG     {}
-[00:31:08.596] Server  LOG     {}
-[00:31:41.414] Server  LOG     {}
-[00:31:55.521] Server  LOG     {}
-[00:32:11.447] Server  LOG     {}
-[00:32:11.449] Server  LOG     lol {}
-[00:33:03.602] Server  LOG     {}
-[00:33:03.608] Server  LOG     lol {}
-[00:33:03.612] Server  LOG     1
-[00:33:19.432] Server  LOG     {}
-[00:33:19.433] Server  LOG     lol {}
-[00:33:19.433] Server  LOG     1
-[00:33:19.575] Server  LOG     {}
-[00:34:52.514] Server  LOG     {}
-[00:34:52.514] Server  LOG     lol {}
-[00:34:52.515] Server  LOG     1
-[00:34:52.650] Server  LOG     {}
-[00:37:52.458] Server  LOG     {}
-[00:37:52.461] Server  LOG     lol {}
-[00:37:52.462] Server  LOG     1
-[00:38:15.338] Server  LOG     {}
-[00:38:15.339] Server  LOG     lol {}
-[00:38:15.339] Server  LOG     8
-[00:39:02.094] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
-[00:39:03.452] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
-[00:39:05.836] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
-[00:39:31.967] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
-[00:41:29.198] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
-[00:41:40.910] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
-[00:42:17.265] Server  WARN    Error: Route "/api/reminders/[id]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:00:01.605] Server  WARN     ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[00:00:01.877] Server  LOG      ✓ Ready in 1414ms
+[00:00:51.134] Server  LOG     {}
+[00:00:51.159] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
+[00:03:47.477] Server  WARN    Error: Route "/api/habits/[id]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:59.672] Server  LOG     {}
+[00:05:59.673] Server  LOG     lol {}
+[00:05:59.673] Server  LOG     4
+[00:06:00.052] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
+[00:07:44.888] Server  ERROR   AuthApiError: Invalid Refresh Token: Refresh Token Not Found
+[00:07:44.917] Server  ERROR   AuthApiError: Invalid Refresh Token: Refresh Token Not Found
+[00:07:45.055] Server  ERROR   AuthApiError: Invalid Refresh Token: Refresh Token Not Found
+    at ignore-listed frames {
+  __isAuthError: true,
+  status: 400,
+  code: 'refresh_token_not_found'
+}
+[00:07:45.068] Server  ERROR   AuthApiError: Invalid Refresh Token: Refresh Token Not Found
+    at ignore-listed frames {
+  __isAuthError: true,
+  status: 400,
+  code: 'refresh_token_not_found'
+}
+[00:17:55.133] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
+[00:17:55.143] Server  LOG     {}
+[01:17:23.282] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
+[01:17:54.648] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
+[01:19:32.407] Server  LOG     {}
+[01:19:41.260] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
+[01:27:24.488] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
+[01:27:24.489] Server  LOG     {}
+[01:27:25.018] Server  LOG     {}
+[01:27:30.153] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
+[01:27:30.154] Server  LOG     {}
+[01:27:31.539] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
+[01:27:31.540] Server  LOG     {}
+[01:27:36.560] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
+[01:27:36.561] Server  LOG     {}
+[01:27:42.561] Server  LOG     043d552e-6c8f-491e-8064-4daa979d4937
+[01:27:42.562] Server  LOG     {}

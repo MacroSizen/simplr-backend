@@ -44,7 +44,7 @@ export type HabitIdInput = z.infer<typeof habitIdSchema>;
 
 // Get habit logs query schema
 export const habitLogsQuerySchema = z.object({
-  habit_id: z.string().uuid("Invalid habit ID").optional(),
+  habit_id: z.string().uuid("Invalid habit ID"),
   startDate: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format")

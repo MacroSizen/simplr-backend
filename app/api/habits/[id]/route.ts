@@ -7,11 +7,12 @@ import { ZodError } from "zod";
 // GET /api/habits/[id]
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyAuth(req);
-    const validated = habitIdSchema.parse({ id: params.id });
+    const { id } = await params;
+    const validated = habitIdSchema.parse({ id });
 
     const { data, error } = await HabitsService.getById(user.id, validated.id);
 
@@ -41,11 +42,12 @@ export async function GET(
 // PATCH /api/habits/[id]
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyAuth(req);
-    const validated = habitIdSchema.parse({ id: params.id });
+    const { id } = await params;
+    const validated = habitIdSchema.parse({ id });
 
     const body = await req.json();
     const updateData = updateHabitSchema.parse(body);
@@ -82,11 +84,12 @@ export async function PATCH(
 // DELETE /api/habits/[id]
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyAuth(req);
-    const validated = habitIdSchema.parse({ id: params.id });
+    const { id } = await params;
+    const validated = habitIdSchema.parse({ id });
 
     const { error } = await HabitsService.delete(user.id, validated.id);
 

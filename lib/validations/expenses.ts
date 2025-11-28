@@ -24,8 +24,8 @@ export const expensesQuerySchema = z.object({
   limit: z.coerce.number().int().positive().max(100).nullish().default(50),
   offset: z.coerce.number().int().nonnegative().nullish().default(0),
   category: z.string().nullish(),
-  startDate: z.string().datetime().nullish(),
-  endDate: z.string().datetime().nullish(),
+  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format").nullish(),
+  endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format").nullish(),
 });
 
 export type ExpensesQueryInput = z.infer<typeof expensesQuerySchema>;

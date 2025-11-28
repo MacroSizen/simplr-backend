@@ -12,8 +12,8 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const query = habitLogsQuerySchema.parse({
       habit_id: searchParams.get("habit_id"),
-      startDate: searchParams.get("startDate"),
-      endDate: searchParams.get("endDate"),
+      startDate: searchParams.get("startDate") || undefined,
+      endDate: searchParams.get("endDate") || undefined,
     });
 
     const { data, error } = await HabitsService.getLogs(user.id, query);

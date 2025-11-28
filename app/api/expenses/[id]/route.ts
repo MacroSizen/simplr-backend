@@ -7,11 +7,12 @@ import { ZodError } from "zod";
 // GET /api/expenses/[id]
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyAuth(req);
-    const validated = expenseIdSchema.parse({ id: params.id });
+    const { id } = await params;
+    const validated = expenseIdSchema.parse({ id });
 
     const { data, error } = await ExpensesService.getById(
       user.id,
@@ -44,11 +45,12 @@ export async function GET(
 // DELETE /api/expenses/[id]
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyAuth(req);
-    const validated = expenseIdSchema.parse({ id: params.id });
+    const { id } = await params;
+    const validated = expenseIdSchema.parse({ id });
 
     const { error } = await ExpensesService.delete(user.id, validated.id);
 

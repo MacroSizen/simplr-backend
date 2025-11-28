@@ -31,6 +31,7 @@ export class ExpensesService {
       .select("*, categories(name)")
       .eq("user_id", userId)
       .order("date", { ascending: false });
+    console.log(query);
 
     // Apply filters
     if (query?.category) {

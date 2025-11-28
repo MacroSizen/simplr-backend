@@ -7,11 +7,11 @@ import { ZodError } from "zod";
 // PUT /api/categories/[id]
 export async function PUT(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const user = await verifyAuth(req);
-        const { id } = params;
+        const { id } = await params;
 
         const body = await req.json();
         const validated = updateCategorySchema.parse(body);
@@ -44,11 +44,11 @@ export async function PUT(
 // DELETE /api/categories/[id]
 export async function DELETE(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const user = await verifyAuth(req);
-        const { id } = params;
+        const { id } = await params;
 
         const { error } = await CategoriesService.delete(user.id, id);
 

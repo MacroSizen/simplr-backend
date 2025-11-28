@@ -10,11 +10,12 @@ import { ZodError } from "zod";
 // GET /api/reminders/[id]
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyAuth(req);
-    const validated = reminderIdSchema.parse({ id: params.id });
+    const { id } = await params;
+    const validated = reminderIdSchema.parse({ id });
 
     const { data, error } = await RemindersService.getReminderById(
       user.id,
@@ -47,11 +48,12 @@ export async function GET(
 // PATCH /api/reminders/[id]
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyAuth(req);
-    const validated = reminderIdSchema.parse({ id: params.id });
+    const { id } = await params;
+    const validated = reminderIdSchema.parse({ id });
 
     const body = await req.json();
     const updateData = updateReminderSchema.parse(body);
@@ -88,11 +90,12 @@ export async function PATCH(
 // DELETE /api/reminders/[id]
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyAuth(req);
-    const validated = reminderIdSchema.parse({ id: params.id });
+    const { id } = await params;
+    const validated = reminderIdSchema.parse({ id });
 
     const { error } = await RemindersService.deleteReminder(
       user.id,
