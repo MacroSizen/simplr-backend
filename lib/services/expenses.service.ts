@@ -43,7 +43,9 @@ export class ExpensesService {
     }
 
     if (query?.endDate) {
-      queryBuilder = queryBuilder.lte("date", query.endDate);
+      // Append time to include the full day if it's just a date string
+      const endDate = query.endDate.includes("T") ? query.endDate : `${query.endDate}T23:59:59.999Z`;
+      queryBuilder = queryBuilder.lte("date", endDate);
     }
 
     // Apply pagination

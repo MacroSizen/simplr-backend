@@ -12,14 +12,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const listId = searchParams.get("list_id");
 
-    if (!listId) {
-      return NextResponse.json(
-        { error: "list_id query parameter is required" },
-        { status: 400 }
-      );
-    }
-
-    const { data, error } = await RemindersService.getReminders(user.id, listId);
+    const { data, error } = await RemindersService.getReminders(user.id, listId || undefined);
 
     if (error) {
       return NextResponse.json(

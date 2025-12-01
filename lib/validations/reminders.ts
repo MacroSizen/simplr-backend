@@ -18,7 +18,7 @@ export type UpdateReminderListInput = z.infer<typeof updateReminderListSchema>;
 export const createReminderSchema = z.object({
   list_id: z.string().uuid("Invalid list ID"),
   title: z.string().min(1, "Title is required").trim().max(500),
-  due_date: z.string().datetime().optional(),
+  due_date: z.string().optional(),
   relevance: z
     .number()
     .int()
@@ -31,7 +31,7 @@ export type CreateReminderInput = z.infer<typeof createReminderSchema>;
 // Update reminder schema
 export const updateReminderSchema = z.object({
   title: z.string().min(1, "Title is required").trim().max(500).optional(),
-  due_date: z.string().datetime().nullable().optional(),
+  due_date: z.string().nullable().optional(),
   relevance: z
     .number()
     .int()

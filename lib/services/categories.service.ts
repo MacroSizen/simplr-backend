@@ -30,6 +30,54 @@ export class CategoriesService {
   }
 
   /**
+   * Get all categories with usage count
+   */
+  static async getWithUsage(userId: string): Promise<{ data: (Category & { usage_count: number })[] | null; error: Error | null }> {
+    const supabase = await createClient();
+
+    // Get all categories
+    const { data: categories, error: categoriesError } = await supabase
+      .from("categories")
+      .select("*")
+      .eq("user_id", userId);
+
+    if (categoriesError) {
+      return { data: null, error: categoriesError };
+    }
+
+    // Get usage counts
+    // Note: This is a bit inefficient but works for now. 
+    // Ideally we'd use a join and count, but Supabase JS client makes that tricky with simple joins.
+    // Or a raw SQL query / RPC.
+    // For now, let's just fetch expenses and count in memory since dataset is likely small per user.
+    const { data: expenses, error: expensesError } = await supabase
+      .from("expenses")
+      .select("category_id")
+      .eq("user_id", userId);
+
+    if (expensesError) {
+      return { data: null, error: expensesError };
+    }
+
+    const usageMap = new Map<string, number>();
+    expenses?.forEach((exp) => {
+      if (exp.category_id) {
+        usageMap.set(exp.category_id, (usageMap.get(exp.category_id) || 0) + 1);
+      }
+    });
+
+    const categoriesWithUsage = categories.map((cat) => ({
+      ...cat,
+      usage_count: usageMap.get(cat.id) || 0,
+    }));
+
+    // Sort by usage count desc
+    categoriesWithUsage.sort((a, b) => b.usage_count - a.usage_count);
+
+    return { data: categoriesWithUsage, error: null };
+  }
+
+  /**
    * Create a new category
    */
   static async create(

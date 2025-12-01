@@ -32,7 +32,7 @@ export type ExpensesQueryInput = z.infer<typeof expensesQuerySchema>;
 
 // Category schemas
 export const createCategorySchema = z.object({
-  name: z.number(),
+  name: z.string().min(1, "Name is required").trim().max(50),
 });
 
 export type CreateCategoryInput = z.infer<typeof createCategorySchema>;

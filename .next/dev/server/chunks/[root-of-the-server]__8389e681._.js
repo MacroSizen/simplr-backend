@@ -229,7 +229,9 @@ class ExpensesService {
             queryBuilder = queryBuilder.gte("date", query.startDate);
         }
         if (query?.endDate) {
-            queryBuilder = queryBuilder.lte("date", query.endDate);
+            // Append time to include the full day if it's just a date string
+            const endDate = query.endDate.includes("T") ? query.endDate : `${query.endDate}T23:59:59.999Z`;
+            queryBuilder = queryBuilder.lte("date", endDate);
         }
         // Apply pagination
         if (query?.limit) {
@@ -343,7 +345,7 @@ const expensesQuerySchema = __TURBOPACK__imported__module__$5b$project$5d2f$node
     endDate: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format").nullish()
 });
 const createCategorySchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].object({
-    name: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].number()
+    name: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().min(1, "Name is required").trim().max(50)
 });
 const updateCategorySchema = createCategorySchema;
 }),

@@ -216,9 +216,11 @@ class ExpensesService {
    * Get all expenses for a user
    */ static async getAll(userId, query) {
         const supabase = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2f$server$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["createClient"])();
-        let queryBuilder = supabase.from("expenses").select("*").eq("user_id", userId).order("date", {
+        console.log(userId);
+        let queryBuilder = supabase.from("expenses").select("*, categories(name)").eq("user_id", userId).order("date", {
             ascending: false
         });
+        console.log(query);
         // Apply filters
         if (query?.category) {
             queryBuilder = queryBuilder.eq("category", query.category);
@@ -243,8 +245,13 @@ class ExpensesService {
                 error
             };
         }
+        // Map the category name if available
+        const mappedData = data.map((expense)=>({
+                ...expense,
+                category: expense.categories?.name || expense.category
+            }));
         return {
-            data: data,
+            data: mappedData,
             error: null
         };
     }
@@ -267,14 +274,16 @@ class ExpensesService {
     /**
    * Create a new expense
    */ static async create(userId, input) {
+        console.log(input.categoryId);
         const supabase = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2f$server$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["createClient"])();
         const { data, error } = await supabase.from("expenses").insert({
             user_id: userId,
-            category: input.category,
+            category_id: input.categoryId,
             amount: input.amount,
             description: input.description || null
         }).select().single();
         if (error) {
+            console.log(error);
             return {
                 data: null,
                 error
@@ -305,17 +314,21 @@ class ExpensesService {
 "use strict";
 
 __turbopack_context__.s([
+    "createCategorySchema",
+    ()=>createCategorySchema,
     "createExpenseSchema",
     ()=>createExpenseSchema,
     "expenseIdSchema",
     ()=>expenseIdSchema,
     "expensesQuerySchema",
-    ()=>expensesQuerySchema
+    ()=>expensesQuerySchema,
+    "updateCategorySchema",
+    ()=>updateCategorySchema
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/external.js [app-route] (ecmascript) <export * as z>");
 ;
 const createExpenseSchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].object({
-    category: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().min(1, "Category is required").trim(),
+    categoryId: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].number(),
     amount: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].number().positive("Amount must be positive").finite("Amount must be a valid number"),
     description: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().trim().optional()
 });
@@ -326,9 +339,13 @@ const expensesQuerySchema = __TURBOPACK__imported__module__$5b$project$5d2f$node
     limit: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].coerce.number().int().positive().max(100).nullish().default(50),
     offset: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].coerce.number().int().nonnegative().nullish().default(0),
     category: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().nullish(),
-    startDate: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().datetime().nullish(),
-    endDate: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().datetime().nullish()
+    startDate: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format").nullish(),
+    endDate: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format").nullish()
 });
+const createCategorySchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].object({
+    name: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zod$40$3$2e$25$2e$76$2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].number()
+});
+const updateCategorySchema = createCategorySchema;
 }),
 "[project]/app/api/expenses/[id]/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
@@ -352,8 +369,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$zo
 async function GET(req, { params }) {
     try {
         const user = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$middleware$2f$auth$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["verifyAuth"])(req);
+        const { id } = await params;
         const validated = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$validations$2f$expenses$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["expenseIdSchema"].parse({
-            id: params.id
+            id
         });
         const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$services$2f$expenses$2e$service$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["ExpensesService"].getById(user.id, validated.id);
         if (error) {
@@ -385,8 +403,9 @@ async function GET(req, { params }) {
 async function DELETE(req, { params }) {
     try {
         const user = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$middleware$2f$auth$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["verifyAuth"])(req);
+        const { id } = await params;
         const validated = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$validations$2f$expenses$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["expenseIdSchema"].parse({
-            id: params.id
+            id
         });
         const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$services$2f$expenses$2e$service$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["ExpensesService"].delete(user.id, validated.id);
         if (error) {

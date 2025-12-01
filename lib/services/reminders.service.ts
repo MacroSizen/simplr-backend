@@ -141,15 +141,19 @@ export class RemindersService {
    */
   static async getReminders(
     userId: string,
-    listId: string
+    listId?: string
   ): Promise<{ data: Reminder[] | null; error: Error | null }> {
     const supabase = await createClient();
-    const { data, error } = await supabase
+    let query = supabase
       .from("reminders")
       .select("*")
-      .eq("user_id", userId)
-      .eq("list_id", listId)
-      .order("due_date", { ascending: true, nullsFirst: false });
+      .eq("user_id", userId);
+
+    if (listId) {
+      query = query.eq("list_id", listId);
+    }
+
+    const { data, error } = await query.order("due_date", { ascending: true, nullsFirst: false });
 
     if (error) {
       return { data: null, error };
