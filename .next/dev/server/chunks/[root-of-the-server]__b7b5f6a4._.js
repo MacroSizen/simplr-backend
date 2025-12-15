@@ -102,6 +102,25 @@ class AuthService {
         };
     }
     /**
+   * Login with Google ID token
+   */ static async loginWithGoogle(token) {
+        const supabase = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2f$server$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["createClient"])();
+        const { data, error } = await supabase.auth.signInWithIdToken({
+            provider: "google",
+            token
+        });
+        if (error) {
+            return {
+                data: null,
+                error
+            };
+        }
+        return {
+            data,
+            error: null
+        };
+    }
+    /**
    * Register a new user
    */ static async register(email, password) {
         const supabase = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2f$server$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["createClient"])();

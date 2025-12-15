@@ -20,6 +20,23 @@ export class AuthService {
   }
 
   /**
+   * Login with Google ID token
+   */
+  static async loginWithGoogle(token: string) {
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.signInWithIdToken({
+      provider: "google",
+      token,
+    });
+
+    if (error) {
+      return { data: null, error };
+    }
+
+    return { data, error: null };
+  }
+
+  /**
    * Register a new user
    */
   static async register(email: string, password: string) {
