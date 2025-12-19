@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import type { Reminder, ReminderList } from "@/lib/types";
+import { NotificationsService } from "./notifications.service";
 
 export interface CreateReminderListDTO {
   name: string;
@@ -208,7 +209,30 @@ export class RemindersService {
       return { data: null, error };
     }
 
-    return { data: data as Reminder, error: null };
+    const reminder = data as Reminder;
+
+    // Schedule notification if due_date is set and in the future
+    if (input.due_date) {
+      const dueDate = new Date(input.due_date);
+      const now = new Date();
+
+      if (dueDate > now) {
+        // Schedule notification for 1 hour before due date (or at due date if less than 1 hour away)
+        const notifyAt = new Date(dueDate.getTime() - 60 * 60 * 1000);
+        const scheduleTime = notifyAt > now ? notifyAt : dueDate;
+
+        await NotificationsService.scheduleNotification(
+          userId,
+          "reminders",
+          "Reminder Due Soon",
+          reminder.title,
+          scheduleTime,
+          reminder.id
+        );
+      }
+    }
+
+    return { data: reminder, error: null };
   }
 
   /**
