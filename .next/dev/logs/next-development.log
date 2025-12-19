@@ -1,2 +1,2 @@
-[00:00:01.127] Server  WARN     ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-[00:00:01.256] Server  LOG      ✓ Ready in 972ms
+[00:00:02.568] Server  WARN     ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[00:00:02.797] Server  LOG      ✓ Ready in 2.1s
